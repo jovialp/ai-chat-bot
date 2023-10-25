@@ -10,8 +10,14 @@ import Form from "@/components/Form";
 import TextInput from "@/components/TextInput";
 import QuestionAnswer from "@/components/QuestionAnswer";
 
+type QuestionAnsType = {
+  id: string;
+  q: string;
+  a: string;
+};
+
 export default function Home() {
-  const [questionAns, setAuestionAns] = useState([]);
+  const [questionAns, setAuestionAns] = useState<QuestionAnsType[]>([]);
 
   const getQuestionAnswer = async () => {
     const response = await fetch("/api/question/get");
@@ -23,8 +29,8 @@ export default function Home() {
       <div className="container pt-4">
         <h1 className="text-center text-4xl font-bold">AI Chat-bot</h1>
         <div>
-          {questionAns.map((qa) => {
-            return <QuestionAnswer data={qa} />;
+          {questionAns?.map((qa) => {
+            return <QuestionAnswer key={qa.id} data={qa} />;
           })}
         </div>
       </div>
