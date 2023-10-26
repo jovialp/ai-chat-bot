@@ -55,9 +55,9 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     try {
-      // const prediction = await getQuestionAnswer(JSON.parse(req.body).prompt);
+      const prediction = await getQuestionAnswer(JSON.parse(req.body).prompt);
       res.statusCode = 201;
-      res.end(JSON.stringify(sampleout));
+      res.end(JSON.stringify(prediction));
     } catch (error) {
       console.log(`Error : ${error}`);
       throw error;

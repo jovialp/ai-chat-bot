@@ -40,7 +40,9 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
   const [questionAns, setQuestionAns] = useState<QuestionAnsType[]>([]);
-  console.log("questionAns", questionAns);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+
+  const [promptInputValue, setPromptInputValue] = useState<string>("");
 
   const [prediction, setPrediction] = useState<PredictionType>(null);
   const [error, setError] = useState(null);
@@ -64,6 +66,7 @@ export default function Home() {
   const getQuestionAnswer = async (e: any) => {
     const prompt = e.target.search.value;
     if (prompt) {
+      setIsGenerating(true);
       const response = await fetch("/api/question/post", {
         method: "POST",
         body: JSON.stringify({ prompt: prompt }),
@@ -75,6 +78,7 @@ export default function Home() {
       }
       setPrediction(prediction);
       addToList(prediction.id, prompt);
+      setPromptInputValue("");
 
       while (
         prediction.status !== "succeeded" &&
@@ -89,10 +93,16 @@ export default function Home() {
         }
         if (prediction?.output?.[0]) {
           addToList(prediction.id, prompt, prediction?.output?.[0]);
+
+          setIsGenerating(false);
         }
         setPrediction(prediction);
       }
     }
+  };
+
+  const handleChange = (e: any) => {
+    setPromptInputValue(e.target.value);
   };
 
   return (
@@ -111,31 +121,20 @@ export default function Home() {
               />
             );
           })}
-          {prediction?.output?.[0] ? (
-            <>
-              <QuestionAnswer
-                prompt="sample"
-                imgSrc={prediction?.output?.[0]}
-              />
-              <QuestionAnswer
-                prompt="sample"
-                imgSrc={prediction?.output?.[0]}
-              />
-              <QuestionAnswer
-                prompt="sample"
-                imgSrc={prediction?.output?.[0]}
-              />
-            </>
-          ) : (
-            <></>
-          )}
         </div>
       </div>
       <div className="fixed w-full p-4 inset-x-0 bottom-0">
         <Form onSubmit={getQuestionAnswer}>
-          <TextInput labelName="Send a message" name="search" required>
+          <TextInput
+            labelName="Send a message"
+            name="search"
+            value={promptInputValue}
+            handleChange={handleChange}
+            required
+          >
             <button
               type="submit"
+              disabled={isGenerating}
               className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               <SendIcon />

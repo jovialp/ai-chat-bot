@@ -1,7 +1,10 @@
+import { SyntheticEvent } from "react";
 interface TextInputProps {
   labelName: string;
   labelClassName?: string;
   name: string;
+  value: string;
+  handleChange: (e: SyntheticEvent) => void;
   inputClassName?: string;
   required?: boolean;
   children?: React.ReactNode;
@@ -11,6 +14,8 @@ const TextInput = ({
   labelName,
   labelClassName = "",
   name,
+  value,
+  handleChange,
   inputClassName,
   required = false,
   children,
@@ -37,28 +42,10 @@ const TextInput = ({
           placeholder={labelName}
           name={name}
           required={required}
+          value={value}
+          onChange={handleChange}
         />
         {children ? children : <></>}
-        {/* <button
-          type="submit"
-          className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="svg-icon"
-            style={{
-              width: "1em",
-              height: "1em",
-              verticalAlign: "middle",
-              fill: "currentColor",
-              overflow: "hidden",
-            }}
-            viewBox="0 0 1024 1024"
-            version="1.1"
-          >
-            <path d="M0 950.857143l1024-438.857143L0 73.142857v341.333333l731.428571 97.52381-731.428571 97.52381z" />
-          </svg>
-        </button> */}
       </div>
     </>
   );

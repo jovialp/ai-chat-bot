@@ -48,9 +48,9 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     try {
-      //   const prediction = await getQuestionAnswerById(req.query.id);
+      const prediction = await getQuestionAnswerById(req.query.id);
       res.statusCode = 200;
-      res.end(JSON.stringify(sampleout));
+      res.end(JSON.stringify(prediction));
     } catch (error) {
       console.log(`Error : ${error}`);
       throw error;
