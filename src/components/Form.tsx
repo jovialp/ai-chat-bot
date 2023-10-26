@@ -1,14 +1,16 @@
 "use client";
+
+import { SyntheticEvent } from "react";
 interface FormProps {
   children: React.ReactNode;
-  onSubmit: () => void;
+  onSubmit: (e: SyntheticEvent) => void;
 }
 const Form = ({ children, onSubmit }: FormProps) => {
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit();
+        onSubmit(e);
       }}
     >
       {children}
