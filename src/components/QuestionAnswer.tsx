@@ -1,3 +1,4 @@
+import InfinityLoadingIcon from "@/assets/icons/InfinityLoadingIcon";
 import Image from "next/image";
 interface QuestionAnswerProps {
   prompt: string;
@@ -22,10 +23,7 @@ const QuestionAnswer = ({ prompt, imgSrc }: QuestionAnswerProps) => {
           />
         ) : (
           <div className="">
-            <p>
-              <span className="animate-spin h-5 w-5 mr-3"></span>
-              Generating
-            </p>
+            <InfinityLoadingIcon strokeColor="#1D4ED8" />
           </div>
         )}
       </div>

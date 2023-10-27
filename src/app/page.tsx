@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, SyntheticEvent } from "react";
+import { useState } from "react";
 
 // Asset
 import SendIcon from "@/assets/icons/SendIcon";
@@ -10,31 +10,9 @@ import Form from "@/components/Form";
 import TextInput from "@/components/TextInput";
 import QuestionAnswer from "@/components/QuestionAnswer";
 
-type PredictionType = {
-  id: string;
-  version: string;
-  input: any;
-  logs: string;
-  error: string | null;
-  status: string;
-  created_at: string;
-  urls: {
-    cancel: string;
-    get: string;
-  };
-  output?: string[];
-  started_at?: string;
-  completed_at?: string;
-  metrics?: {
-    predict_time?: number;
-  };
-} | null;
-
-type QuestionAnsType = {
-  id: string;
-  question: string;
-  answer?: string;
-};
+// Types
+import { PredictionType, QuestionAnsType } from "@/types/home";
+import SpinIcon from "@/assets/icons/SpinIcon";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -48,8 +26,6 @@ export default function Home() {
   const [error, setError] = useState(null);
 
   const addToList = (id: string, prompt: string, output?: string) => {
-    console.log("addToList", { id: id, question: prompt });
-
     if (output) {
       let obj = questionAns.find((o, i) => {
         if (o.id === id) {
@@ -126,7 +102,7 @@ export default function Home() {
       <div className="fixed w-full p-4 inset-x-0 bottom-0">
         <Form onSubmit={getQuestionAnswer}>
           <TextInput
-            labelName="Send a message"
+            labelName="Imagine something... Eg: Husky dog playing football"
             name="search"
             value={promptInputValue}
             handleChange={handleChange}
@@ -137,7 +113,7 @@ export default function Home() {
               disabled={isGenerating}
               className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              <SendIcon />
+              {isGenerating ? <SpinIcon size="1rem" /> : <SendIcon />}
             </button>
           </TextInput>
         </Form>
