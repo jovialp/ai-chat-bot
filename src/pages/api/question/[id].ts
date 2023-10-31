@@ -1,5 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+// Sample output for testing
+import { sampleOutText } from "../../../constants/sampleApiResponses";
+
 async function getQuestionAnswerById(id: string) {
   const response = await fetch(
     "https://api.replicate.com/v1/predictions/" + id,
@@ -29,7 +32,7 @@ export default async function handler(
     try {
       const prediction = await getQuestionAnswerById(req.query.id);
       res.statusCode = 200;
-      res.end(JSON.stringify(prediction));
+      res.end(JSON.stringify(prediction)); // put sample Output here for testing
     } catch (error) {
       console.log(`Error : ${error}`);
       throw error;

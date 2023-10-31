@@ -4,21 +4,25 @@ import { useState } from "react";
 
 // Asset
 import SendIcon from "@/assets/icons/SendIcon";
+import SpinIcon from "@/assets/icons/SpinIcon";
 
 // Components
 import Form from "@/components/Form";
 import TextInput from "@/components/TextInput";
+import ToggleButton from "@/components/ToggleButton";
 import QuestionAnswer from "@/components/QuestionAnswer";
 
 // Types
-import { PredictionType, QuestionAnsType } from "@/types/home";
-import SpinIcon from "@/assets/icons/SpinIcon";
+import { PROMPT_TYPE, PredictionType, QuestionAnsType } from "@/types/home";
+import { PROMPT_TYPE_IMAGE, PROMPT_TYPE_TEXT } from "@/constants";
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+// Utils
+import { sleep } from "@/utils";
 
 export default function Home() {
   const [questionAns, setQuestionAns] = useState<QuestionAnsType[]>([]);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const [promptInputValue, setPromptInputValue] = useState<string>("");
 
@@ -29,12 +33,19 @@ export default function Home() {
     if (output) {
       let obj = questionAns.find((o, i) => {
         if (o.id === id) {
-          questionAns[i] = { ...questionAns[i], answer: output };
+          questionAns[i] = {
+            ...questionAns[i],
+            [isChecked ? "imgSrc" : "answer"]: output,
+          };
           return true; // stop searching
         }
       });
     } else if (!questionAns.find((l) => l.id === id)) {
-      questionAns.push({ id: id, question: prompt });
+      questionAns.push({
+        id: id,
+        question: prompt,
+        type: isChecked ? PROMPT_TYPE.IMAGE : PROMPT_TYPE.TEXT,
+      });
     }
     setQuestionAns(questionAns);
   };
@@ -67,8 +78,12 @@ export default function Home() {
           setError(prediction.detail);
           return;
         }
-        if (prediction?.output?.[0]) {
-          addToList(prediction.id, prompt, prediction?.output?.[0]);
+        if (prediction?.output) {
+          addToList(
+            prediction.id,
+            prompt,
+            isChecked ? prediction?.output?.[0] : prediction?.output?.join("")
+          );
 
           setIsGenerating(false);
         }
@@ -81,10 +96,22 @@ export default function Home() {
     setPromptInputValue(e.target.value);
   };
 
+  const handleToggleButtonChange = (e: any) => {
+    setIsChecked(!isChecked);
+  };
+
   return (
     <main className="bg-gray-100">
-      <div className="fixed w-full bg-white shadow-md pt-3 pb-4">
+      <div className="fixed w-full bg-white shadow-md pt-3 pb-10 sm:pb-4">
         <h1 className=" text-center text-4xl font-bold">Imagine-bot</h1>
+        <div className="absolute right-10 top-14 sm:top-5">
+          <ToggleButton
+            isChecked={isChecked}
+            handleChange={handleToggleButtonChange}
+            firstLabel={PROMPT_TYPE_TEXT}
+            secondLabel={PROMPT_TYPE_IMAGE}
+          />
+        </div>
       </div>
       <div className="min-h-screen pt-20 pb-20">
         <div className="">
@@ -93,7 +120,8 @@ export default function Home() {
               <QuestionAnswer
                 key={qa.id}
                 prompt={qa.question}
-                imgSrc={qa.answer}
+                imgSrc={qa.imgSrc}
+                resultText={qa.answer}
               />
             );
           })}

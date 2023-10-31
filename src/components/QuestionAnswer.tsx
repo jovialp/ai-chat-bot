@@ -1,11 +1,19 @@
 import InfinityLoadingIcon from "@/assets/icons/InfinityLoadingIcon";
 import Image from "next/image";
+
+// Components
+import TypeWriting from "./TypeWriting";
 interface QuestionAnswerProps {
   prompt: string;
   imgSrc?: string;
+  resultText?: string;
 }
 
-const QuestionAnswer = ({ prompt, imgSrc }: QuestionAnswerProps) => {
+const QuestionAnswer = ({
+  prompt,
+  imgSrc,
+  resultText,
+}: QuestionAnswerProps) => {
   return (
     <div className="border-b-1 border-black">
       <div className="px-20 py-4 bg-gray-100">
@@ -21,6 +29,8 @@ const QuestionAnswer = ({ prompt, imgSrc }: QuestionAnswerProps) => {
             alt="output"
             sizes="100%"
           />
+        ) : resultText ? (
+          <TypeWriting text={resultText} />
         ) : (
           <div className="">
             <InfinityLoadingIcon strokeColor="#1D4ED8" />

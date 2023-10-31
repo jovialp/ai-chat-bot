@@ -1,3 +1,5 @@
+import { PROMPT_TYPE_IMAGE, PROMPT_TYPE_TEXT } from "../constants";
+
 export type PredictionType = {
   id: string;
   version: string;
@@ -18,8 +20,15 @@ export type PredictionType = {
   };
 } | null;
 
+export enum PROMPT_TYPE {
+  IMAGE = PROMPT_TYPE_IMAGE,
+  TEXT = PROMPT_TYPE_TEXT,
+}
+
 export type QuestionAnsType = {
   id: string;
   question: string;
+  imgSrc?: string;
   answer?: string;
+  type: PROMPT_TYPE;
 };
