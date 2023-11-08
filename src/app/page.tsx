@@ -102,7 +102,7 @@ export default function Home() {
 
   return (
     <main className="bg-gray-100">
-      <div className="fixed w-full bg-white shadow-md pt-3 pb-10 sm:pb-4">
+      <div className="fixed w-full bg-white shadow-md pt-3 pb-10 sm:pb-4 z-10">
         <h1 className=" text-center text-4xl font-bold">Imagine-bot</h1>
         <div className="absolute right-10 top-14 sm:top-5">
           <ToggleButton
