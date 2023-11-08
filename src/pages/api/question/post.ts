@@ -9,22 +9,44 @@ type INPUT_TYPE = {
   temperature?: number;
   system_prompt?: string;
   max_new_tokens?: number;
+  refine?: string;
+  scheduler?: string;
+  lora_scale?: number;
+  num_outputs?: number;
+  guidance_scale?: number;
+  apply_watermark?: boolean;
+  high_noise_frac?: number;
+  prompt_strength?: number;
+  num_inference_steps?: number;
 };
 
 async function getQuestionAnswer(promptStr: string, questionType: string) {
   let input: INPUT_TYPE = { prompt: promptStr };
-  const version =
-    questionType === "TEXT"
-      ? "13c3cdee13ee059ab779f0291d29054dab00a47dad8261375654de5540165fb0"
-      : "2b017d9b67edd2ee1401238df49d75da53c523f36e363881e057f5dc3ed3c5b2";
+  let version: string =
+    "39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b";
 
   if (questionType === "TEXT") {
+    version =
+      "13c3cdee13ee059ab779f0291d29054dab00a47dad8261375654de5540165fb0";
     input = {
       ...input,
       temperature: 0.75,
       system_prompt:
         "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.",
       max_new_tokens: 800,
+    };
+  } else {
+    input = {
+      ...input,
+      refine: "expert_ensemble_refiner",
+      scheduler: "K_EULER",
+      lora_scale: 0.6,
+      num_outputs: 1,
+      guidance_scale: 7.5,
+      apply_watermark: false,
+      high_noise_frac: 0.8,
+      prompt_strength: 0.8,
+      num_inference_steps: 25,
     };
   }
 
