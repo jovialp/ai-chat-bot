@@ -4,11 +4,29 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { PROMPT_TYPE_TEXT } from "@/constants";
 import { sampleIn } from "../../../constants/sampleApiResponses";
 
+type INPUT_TYPE = {
+  prompt: string;
+  temperature?: number;
+  system_prompt?: string;
+  max_new_tokens?: number;
+};
+
 async function getQuestionAnswer(promptStr: string, questionType: string) {
+  let input: INPUT_TYPE = { prompt: promptStr };
   const version =
     questionType === "TEXT"
-      ? "02e509c789964a7ea8736978a43525956ef40397be9033abf9fd2badfe68c9e3"
+      ? "13c3cdee13ee059ab779f0291d29054dab00a47dad8261375654de5540165fb0"
       : "2b017d9b67edd2ee1401238df49d75da53c523f36e363881e057f5dc3ed3c5b2";
+
+  if (questionType === "TEXT") {
+    input = {
+      ...input,
+      temperature: 0.75,
+      system_prompt:
+        "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.",
+      max_new_tokens: 800,
+    };
+  }
 
   const response = await fetch("https://api.replicate.com/v1/predictions", {
     method: "POST",
@@ -22,7 +40,7 @@ async function getQuestionAnswer(promptStr: string, questionType: string) {
       version: version,
 
       // This is the text prompt that will be submitted by a form on the frontend
-      input: { prompt: promptStr },
+      input: { ...input },
     }),
   });
 
