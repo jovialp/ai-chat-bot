@@ -130,7 +130,11 @@ export default function Home() {
       <div className="fixed w-full p-4 inset-x-0 bottom-0">
         <Form onSubmit={getQuestionAnswer}>
           <TextInput
-            labelName="Imagine something... Eg: Husky dog playing football"
+            labelName={
+              isChecked
+                ? "Imagine something... Eg: Husky dog playing football"
+                : "Ask something... Eg: Expain how to play uno"
+            }
             name="search"
             value={promptInputValue}
             handleChange={handleChange}
