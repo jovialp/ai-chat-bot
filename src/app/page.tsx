@@ -58,7 +58,7 @@ export default function Home() {
         method: "POST",
         body: JSON.stringify({
           prompt: prompt,
-          questionType: isChecked ? PROMPT_TYPE_IMAGE : PROMPT_TYPE_TEXT,
+          type: isChecked ? PROMPT_TYPE_IMAGE : PROMPT_TYPE_TEXT,
         }),
       });
       let prediction = await response.json();
