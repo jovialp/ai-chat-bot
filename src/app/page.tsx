@@ -56,7 +56,10 @@ export default function Home() {
       setIsGenerating(true);
       const response = await fetch("/api/question/post", {
         method: "POST",
-        body: JSON.stringify({ prompt: prompt }),
+        body: JSON.stringify({
+          prompt: prompt,
+          questionType: isChecked ? PROMPT_TYPE_TEXT : PROMPT_TYPE_IMAGE,
+        }),
       });
       let prediction = await response.json();
       if (response.status !== 201) {

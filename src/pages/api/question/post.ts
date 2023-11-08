@@ -25,7 +25,7 @@ async function getQuestionAnswer(promptStr: string, questionType: string) {
   let version: string =
     "39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b";
 
-  if (questionType === "TEXT") {
+  if (questionType === PROMPT_TYPE_TEXT) {
     version =
       "13c3cdee13ee059ab779f0291d29054dab00a47dad8261375654de5540165fb0";
     input = {
