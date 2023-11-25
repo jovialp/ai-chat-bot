@@ -152,6 +152,7 @@ export default function Home() {
             </button>
           </TextInput>
         </Form>
+        <h6>Copyright ©{new Date().getFullYear()} by <a href="/">Jovial</a>. All rights reserved.</h6>
       </div>
     </main>
   );
